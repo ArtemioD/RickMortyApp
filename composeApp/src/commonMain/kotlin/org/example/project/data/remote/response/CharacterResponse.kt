@@ -10,6 +10,10 @@ data class CharacterResponse(
     val status: String,
     val image: String,
     val name: String,
+    val species: String,
+    val gender: String,
+    val origin: OriginResponse,
+    val episode: List<String>
 ) {
 //    fun toDomain(): CharacterModel {
 //        return CharacterModel(
@@ -20,11 +24,18 @@ data class CharacterResponse(
 //    }
 }
 
+@Serializable
+data class OriginResponse(val name: String)
+
 fun CharacterResponse.toDomain(): CharacterModel {
     return CharacterModel(
         id = id,
         isAlive = status.lowercase() == "alive",
         image = image,
-        name = name
+        name = name,
+        species = species,
+        gender = gender,
+        origin = origin.name,
+        episodes = episode.map { it.substringAfterLast("/") }
     )
 }

@@ -1,5 +1,6 @@
 package org.example.project.domain.model
 
+import kotlinx.serialization.json.Json
 import org.example.project.data.database.entity.CharacterOfTheDayEntity
 
 data class CharacterOfTheDayModel(
@@ -13,6 +14,10 @@ fun CharacterOfTheDayModel.toEntity(): CharacterOfTheDayEntity {
         isAlive = characterModel.isAlive,
         image = characterModel.image,
         name = characterModel.name,
-        selectedDay = selectedDay
+        selectedDay = selectedDay,
+        species = characterModel.species,
+        gender = characterModel.gender,
+        origin = characterModel.origin,
+        episodes = Json.encodeToString(characterModel.episodes)
     )
 }

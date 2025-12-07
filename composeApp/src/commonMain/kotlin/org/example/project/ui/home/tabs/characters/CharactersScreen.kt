@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
@@ -47,17 +46,21 @@ import rickmorty.composeapp.generated.resources.Res
 import rickmorty.composeapp.generated.resources.rickface
 
 @Composable
-fun CharactersScreen() {
+fun CharactersScreen(navigateToDetail: (CharacterModel) -> Unit) {
 
     val charactersViewModel = koinViewModel<CharactersViewModel>()
     val state by charactersViewModel.state.collectAsState()
     val characters = state.characters.collectAsLazyPagingItems()
 
-    CharactersGridList(characters, state)
+    CharactersGridList(characters, state, navigateToDetail)
 }
 
 @Composable
-fun CharactersGridList(characters: LazyPagingItems<CharacterModel>, state: CharactersState) {
+fun CharactersGridList(
+    characters: LazyPagingItems<CharacterModel>,
+    state: CharactersState,
+    navigateToDetail: (CharacterModel) -> Unit
+) {
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
         columns = GridCells.Fixed(2),
@@ -95,7 +98,9 @@ fun CharactersGridList(characters: LazyPagingItems<CharacterModel>, state: Chara
                 // recorremos los items
                 items(characters.itemCount) { pos ->
                     characters[pos]?.let { characterModel ->
-                        CharacterItemList(characterModel)
+                        CharacterItemList(characterModel) { character ->
+                            navigateToDetail(character)
+                        }
                     }
                 }
 
@@ -167,13 +172,15 @@ fun CharacterOfTheDay(characterModel: CharacterModel? = null) {
 }
 
 @Composable
-fun CharacterItemList(characterModel: CharacterModel) {
+fun CharacterItemList(characterModel: CharacterModel, onItemSelected: (CharacterModel) -> Unit) {
     Box(
         modifier = Modifier.clip(RoundedCornerShape(24))
             .border(
                 2.dp, Color.Green,
                 shape = RoundedCornerShape(0, 24, 0, 24)
-            ).fillMaxWidth().height(150.dp).clickable {},
+            ).fillMaxWidth().height(150.dp).clickable {
+                onItemSelected(characterModel)
+            },
         contentAlignment = Alignment.BottomCenter
     ) {
         AsyncImage(
@@ -206,5 +213,16 @@ fun CharacterItemList(characterModel: CharacterModel) {
 @Preview()
 @Composable
 fun PreviewCharacterOfTheDay() {
-    CharacterOfTheDay(characterModel = CharacterModel(1, true, "image", name = "Pepe"))
+    CharacterOfTheDay(
+        characterModel = CharacterModel(
+            1,
+            true,
+            "image",
+            name = "Pepe",
+            species = "Humano",
+            gender = "",
+            origin = "",
+            episodes = emptyList()
+        )
+    )
 }

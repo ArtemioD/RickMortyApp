@@ -19,14 +19,14 @@ import org.example.project.ui.core.navigation.bottomnavigation.BottomBarItem.Epi
 import org.example.project.ui.core.navigation.bottomnavigation.NavigationBottomWrapper
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(mainNavController: NavHostController) {
 
     val items = listOf(Episodes(), Characters())
     val navController = rememberNavController()
 
     Scaffold(bottomBar = { BottomNavigation(items, navController) }) { paddingValues ->
         Box(modifier = Modifier.padding(paddingValues)) {
-            NavigationBottomWrapper(navController)
+            NavigationBottomWrapper(navController, mainNavController)
         }
     }
 }

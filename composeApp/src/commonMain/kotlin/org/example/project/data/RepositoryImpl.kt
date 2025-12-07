@@ -50,6 +50,20 @@ class RepositoryImpl(
         rickMortyDatabase.getPreferencesDao().saveCharacter(characterOfTheDayModel.toEntity())
     }
 
+    override suspend fun getEpisodesForCharacter(episodes: List<String>): List<EpisodeModel> {
+
+        if (episodes.isEmpty()) return emptyList()
+
+        return if (episodes.size > 1) {
+            api.getEpisodes(episodes.joinToString(",")).map { episodeModel ->
+                episodeModel.toDomain()
+            }
+        } else {
+            listOf(api.getSingleEpisode(episodes.first()).toDomain())
+        }
+
+    }
+
     companion object {
         const val MAX_ITEMS = 20
         const val PREFETCH_ITEMS = 5

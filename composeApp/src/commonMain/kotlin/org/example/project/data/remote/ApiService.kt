@@ -6,8 +6,10 @@ import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import org.example.project.data.remote.response.CharacterResponse
 import org.example.project.data.remote.response.CharactersWrapperResponse
+import org.example.project.data.remote.response.EpisodeResponse
 import org.example.project.data.remote.response.EpisodesWrapperResponse
 import org.example.project.data.remote.response.InfoResponse
+import org.example.project.domain.model.SeasonEpisode
 
 class ApiService(
     private val client: HttpClient
@@ -18,7 +20,7 @@ class ApiService(
     }
 
     suspend fun getAllCharacters(page: Int): CharactersWrapperResponse {
-       return client.get("/api/character/") {
+        return client.get("/api/character/") {
             parameter("page", page)
         }.body()
     }
@@ -27,5 +29,13 @@ class ApiService(
         return client.get("/api/episode/") {
             parameter("page", page)
         }.body()
+    }
+
+    suspend fun getEpisodes(episodes: String): List<EpisodeResponse> {
+        return client.get("/api/episode/$episodes").body()
+    }
+
+    suspend fun getSingleEpisode(episode: String): EpisodeResponse {
+        return client.get("/api/episode/$episode").body()
     }
 }

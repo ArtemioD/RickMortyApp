@@ -41,6 +41,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
 
             implementation(libs.paging.runtime)
+            implementation(libs.core.splashscreen)
         }
         commonMain.dependencies {
             implementation(compose.runtime)

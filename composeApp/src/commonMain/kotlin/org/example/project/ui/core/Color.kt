@@ -17,6 +17,9 @@ val BackgroundTertiaryColor
 val DefaultTextColor
     @Composable get() = if (isSystemInDarkTheme()) Color.White else Color.Black
 
+val PlaceholderColor
+    @Composable get() = if (isSystemInDarkTheme()) TertiaryBlack else SecondaryWhite
+
 
 val Pink = Color(0xFFFF577D)
 val Green = Color(0xFF5CCF92)
